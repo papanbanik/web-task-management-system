@@ -1,17 +1,16 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './Home'
-import AddTopic from './AddTopic/page'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import AddTopic from "./AddTopic/page";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home/>} />
-        <Route path='/addtopic' element={<AddTopic/>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/addtopic" element={<AddTopic />} />
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default App
+export default App;

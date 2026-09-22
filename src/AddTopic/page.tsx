@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, type FormEvent, type ChangeEvent } from "react";
 import Navbar from "../Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ const Page = () => {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const handleAdd = async (e) => {
+  const handleAdd = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!title.trim() || !description.trim()) {
@@ -33,12 +33,19 @@ const Page = () => {
         priority,
         status,
       });
+
       navigate("/");
-    } catch (err) {
+    } catch (err: unknown) {
       console.log(err);
-      setError(
-        err.response?.data?.message || "Couldn't add the task. Try again.",
-      );
+
+      if (axios.isAxiosError(err)) {
+        setError(
+          err.response?.data?.message || "Couldn't add the task. Try again.",
+        );
+      } else {
+        setError("Couldn't add the task. Try again.");
+      }
+
       setSaving(false);
     }
   };
@@ -63,11 +70,12 @@ const Page = () => {
             >
               Title
             </label>
+
             <input
               id="title"
               type="text"
               value={title}
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setTitle(e.target.value);
                 setError("");
               }}
@@ -83,10 +91,11 @@ const Page = () => {
             >
               Description
             </label>
+
             <textarea
               id="description"
               value={description}
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 setDescription(e.target.value);
                 setError("");
               }}
@@ -104,10 +113,13 @@ const Page = () => {
               >
                 Priority
               </label>
+
               <select
                 id="priority"
                 value={priority}
-                onChange={(e) => setPriority(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                  setPriority(e.target.value)
+                }
                 className="field-input"
               >
                 <option value="low">Low</option>
@@ -123,10 +135,13 @@ const Page = () => {
               >
                 Status
               </label>
+
               <select
                 id="status"
                 value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                  setStatus(e.target.value)
+                }
                 className="field-input"
               >
                 <option value="todo">To do</option>
@@ -150,6 +165,7 @@ const Page = () => {
             >
               Cancel
             </button>
+
             <button
               type="submit"
               disabled={saving}
